@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -29,8 +31,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,6 +41,13 @@ public class ForecastFragment extends Fragment {
 
     public ForecastFragment() {
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -64,8 +71,7 @@ public class ForecastFragment extends Fragment {
 
         if(id==R.id.action_refresh)
         {
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute("1273874");
+            updateWeather();
             return true;
         }
 
@@ -73,28 +79,28 @@ public class ForecastFragment extends Fragment {
     }
 
 
+    private void updateWeather()
+    {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location=prefs.getString(getString(R.string.pref_location_key),getString(R.string.pref_default_value));
+        weatherTask.execute(location);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        String[] data = {
-                "Mon 6/23 - Sunny - 31/17",
-                "Tue 6/24 - Foggy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
-        };
 
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+
+
 
         mForecastAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast
+                new ArrayList<String>()
         );
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -140,8 +146,18 @@ public class ForecastFragment extends Fragment {
         /**
          * Prepare the weather high/lows for presentation.
          */
-        private String formatHighLows(double high, double low) {
-            // For presentation, assume the user doesn't care about tenths of a degree.
+        private String formatHighLows(double high, double low, String unitType) {
+
+            if(unitType.equals(getString(R.string.pref_units_imperial)))
+            {
+                high = (high * 1.8)+ 32;
+                low = (low * 1.8) + 32;
+            }
+
+            else if(!unitType.equals(getString(R.string.pref_units_metric)))
+                Log.d(LOG_TAG,"Unit Type not found "+ unitType);
+
+
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
 
@@ -187,6 +203,10 @@ public class ForecastFragment extends Fragment {
             // now we work exclusively in UTC
             dayTime = new Time();
 
+            SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String unitType=prefs.getString(getString(R.string.pref_units_key),getString(R.string.pref_units_metric));
+
+
             String[] resultStrs = new String[numDays];
             for(int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
@@ -198,8 +218,7 @@ public class ForecastFragment extends Fragment {
                 JSONObject dayForecast = weatherArray.getJSONObject(i);
 
                 // The date/time is returned as a long.  We need to convert that
-                // into something human-readable, since most people won't read "1400356800" as
-                // "this saturday".
+                // into something human-readable
                 long dateTime;
                 // Cheating to convert this to UTC time, which is what we want anyhow
                 dateTime = dayTime.setJulianDay(julianStartDay+i);
@@ -209,13 +228,12 @@ public class ForecastFragment extends Fragment {
                 JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
                 description = weatherObject.getString(OWM_DESCRIPTION);
 
-                // Temperatures are in a child object called "temp".  Try not to name variables
-                // "temp" when working with temperature.  It confuses everybody.
+                // Temperatures are in a child object called "temp".
                 JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
-                highAndLow = formatHighLows(high, low);
+                highAndLow = formatHighLows(high, low, unitType);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
