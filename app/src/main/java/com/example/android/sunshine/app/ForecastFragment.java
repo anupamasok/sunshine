@@ -89,6 +89,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+
         getLoaderManager().initLoader(FORECAST_LOADER,savedInstanceState,this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -110,6 +112,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         String locationSetting = Utility.getPreferredLocation(getActivity());
 
         // Sort order:  Ascending, by date.
