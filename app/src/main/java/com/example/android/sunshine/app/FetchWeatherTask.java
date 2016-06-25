@@ -141,13 +141,15 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         final String OWM_WIND_DIRECTION = "deg";
 
 
-        final String OWM_MAX = "temp_max";
-        final String OWM_MIN = "temp_min";
+        final String OWM_MAX = "max";
+        final String OWM_MIN = "min";
 
         final String OWM_WEATHER = "weather";
-        final String OWM_DESCRIPTION = "main";
+        final String OWM_MAIN_DESCRIPTION = "main";
+        final String OWM_DESCRIPTION = "description";
         final String OWM_WEATHER_ID = "id";
         final String OWM_WIND = "wind";
+        final String OWM_TEMP = "temp";
 
         try {
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
@@ -203,24 +205,24 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                 // Cheating to convert this to UTC time, which is what we want anyhow
                 dateTime = dayTime.setJulianDay(julianStartDay+i);
 
-                JSONObject mainNode = dayForecast.getJSONObject(OWM_DESCRIPTION);
+                JSONObject tempNode = dayForecast.getJSONObject(OWM_TEMP);
 
-                high = mainNode.getDouble(OWM_MAX);
-                low = mainNode.getDouble(OWM_MIN);
-                humidity = mainNode.getInt(OWM_HUMIDITY);
-                pressure = mainNode.getDouble(OWM_PRESSURE);
+                high = tempNode.getDouble(OWM_MAX);
+                low = tempNode.getDouble(OWM_MIN);
 
-                JSONObject windNode = dayForecast.getJSONObject(OWM_WIND);
+                humidity = dayForecast.getInt(OWM_HUMIDITY);
+                pressure = dayForecast.getDouble(OWM_PRESSURE);
 
-                windSpeed = windNode.getDouble(OWM_WINDSPEED);
-                windDirection = windNode.getDouble(OWM_WIND_DIRECTION);
+
+                windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
+                windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
 
                 // Description is in a child array called "weather", which is 1 element long.
                 // That element also contains a weather code.
                 JSONObject weatherObject =
                         dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-                description = weatherObject.getString("description");
-                mainDescription = weatherObject.getString(OWM_DESCRIPTION);
+                description = weatherObject.getString(OWM_DESCRIPTION);
+                mainDescription = weatherObject.getString(OWM_MAIN_DESCRIPTION);
                 weatherId = weatherObject.getInt(OWM_WEATHER_ID);
 
 
@@ -284,7 +286,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL =
-                    "http://api.openweathermap.org/data/2.5/forecast/city?";
+                    "http://api.openweathermap.org/data/2.5/forecast/daily?";
             final String QUERY_PARAM = "id";
             final String FORMAT_PARAM = "mode";
             final String UNITS_PARAM = "units";
@@ -301,7 +303,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
             URL url = new URL(builtUri.toString());
 
-            Log.d(LOG_TAG,"Connecting to URL : " + builtUri.toString());
+            Log.e(LOG_TAG,"Connecting to URL : " + builtUri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -330,6 +332,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                 return null;
             }
             forecastJsonStr = buffer.toString();
+            Log.e(LOG_TAG,forecastJsonStr);
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
 
         }
