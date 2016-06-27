@@ -263,14 +263,13 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
 
-        // If there's no zip code, there's nothing to look up.  Verify size of params.
+
         if (params.length == 0) {
             return  null;
         }
         String locationQuery = params[0];
 
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
+
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
@@ -283,8 +282,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
         try {
             // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+
             final String FORECAST_BASE_URL =
                     "http://api.openweathermap.org/data/2.5/forecast/daily?";
             final String QUERY_PARAM = "id";
@@ -321,9 +319,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
+
                 buffer.append(line + "\n");
             }
 
@@ -339,8 +335,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         catch (IOException e)
         {
             Log.e(LOG_TAG, "Error  ", e);
-            // If the code didn't successfully get the weather data, there's no point in attempting
-            // to parse it.
+
         }
         catch (JSONException e)
         {

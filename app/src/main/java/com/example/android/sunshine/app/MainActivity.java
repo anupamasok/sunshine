@@ -10,7 +10,6 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
 
-    private final String FORECASTFRAGMENT_TAG = "FFTAG";
     private String mLocation;
 
     @Override
