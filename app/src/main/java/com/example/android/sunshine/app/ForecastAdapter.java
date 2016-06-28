@@ -59,11 +59,14 @@ public class ForecastAdapter extends CursorAdapter {
             viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(weatherId));
 
 
+
         long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         viewHolder.dateView.setText(Utility.getFriendlyDayString(context, dateInMillis));
 
         String description = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
         viewHolder.descriptionView.setText(description);
+
+        viewHolder.iconView.setContentDescription(description);
 
         boolean isMetric = Utility.isMetric(context);
 

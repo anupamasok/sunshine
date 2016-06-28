@@ -6,6 +6,13 @@
         <ripple android:color="@color/sunshine_blue" />
     </item>
 
+
+    <item android:state_activated="true"
+        android:drawable="@color/sunshine_light_blue"/>
+
+    <item android:state_selected="true"
+        android:drawable="@color/sunshine_light_blue"/>
+
     <!-- Default, "just hangin' out" state. -->
     <item android:drawable="@color/sunshine_blue" />
 
