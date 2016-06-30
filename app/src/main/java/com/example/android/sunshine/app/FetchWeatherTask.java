@@ -301,7 +301,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
             URL url = new URL(builtUri.toString());
 
-            Log.e(LOG_TAG,"Connecting to URL : " + builtUri.toString());
+            Log.d(LOG_TAG,"Connecting to URL : " + builtUri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -328,7 +328,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                 return null;
             }
             forecastJsonStr = buffer.toString();
-            Log.e(LOG_TAG,forecastJsonStr);
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
 
         }

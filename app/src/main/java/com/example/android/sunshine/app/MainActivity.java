@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-         super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_main);
 
@@ -47,10 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
         super.onResume();
         String location = Utility.getPreferredLocation(this);
+        String dLocation = ForecastAdapter.getDisplayLocation();
 
-        if(location != null && !location.equals(mLocation))
+        Log.e("My Error","location : " + location + " dlocation : " + dLocation);
+
+        if(location != null && !location.equals(dLocation) && dLocation != null)
         {
-             mLocation = location;
+            Log.e("My ERROR","Location has changed");
+            mLocation = location;
             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
             ff.onLocationChanged();
 

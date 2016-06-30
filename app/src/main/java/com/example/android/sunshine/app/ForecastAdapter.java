@@ -12,6 +12,7 @@ public class ForecastAdapter extends CursorAdapter {
 
     private final int VIEW_TYPE_TODAY = 0;
     private final int VIEW_TYPE_FUTURE_DAY = 1;
+    private static String mdisplayLocation = null;
 
     public ForecastAdapter(Context context, Cursor c, int flags)
     {
@@ -48,6 +49,9 @@ public class ForecastAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
+        String displayLocation = cursor.getString(ForecastFragment.COL_LOCATION_SETTING);
+        mdisplayLocation = displayLocation;
+
         int viewType = getItemViewType(cursor.getPosition());
         int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
 
@@ -76,5 +80,10 @@ public class ForecastAdapter extends CursorAdapter {
 
         double low = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
         viewHolder.lowTempView.setText(Utility.formatTemperature(context,low, isMetric));
+    }
+
+    public static String getDisplayLocation()
+    {
+        return mdisplayLocation;
     }
 }
