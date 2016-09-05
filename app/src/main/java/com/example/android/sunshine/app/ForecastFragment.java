@@ -19,7 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
-import com.example.android.sunshine.app.service.SunshineService;
+import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,6 +29,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     ForecastAdapter mForecastAdapter;
     int mposition;
     ListView mlistView;
+
+    private static final String LOG_TAG = "FORECAST FRAGMENT";
 
     private static final int FORECAST_LOADER = 0;
 
@@ -109,11 +111,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private void updateWeather()
     {
-        String location = Utility.getPreferredLocation(getActivity());
-        Intent intent = new Intent(getActivity(), SunshineService.class);
-        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,location);
-        getActivity().startService(intent);
-
+        SunshineSyncAdapter.syncImmediately(getActivity());
 
     }
     @Override
