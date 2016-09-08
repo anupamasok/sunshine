@@ -15,6 +15,9 @@ import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
+import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -142,6 +145,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         catch (JSONException e)
         {
+
             Log.e(LOG_TAG, "Error  ", e);
             e.printStackTrace();
         }
@@ -306,7 +310,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(LOG_TAG, "SunshineService Complete. " + inserted + " Inserted");
 
 
-            // delete weather data for previois days
+            // delete weather data for previous days
             getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
 
                     WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
@@ -322,10 +326,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     Boolean.parseBoolean(getContext().getString(R.string.pref_enable_notifications_default)));
 
+            Log.d(LOG_TAG," Display notification is " + displayNotifications);
+
             if(displayNotifications)
               notifyWeather();
 
         } catch (JSONException e) {
+
+            Log.d(LOG_TAG,"Inside json exception");
+
+            sendNetworkToast(getContext());
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
@@ -372,6 +382,19 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param context The context used to access the account service
      */
     public static void syncImmediately(Context context) {
+
+        Log.d("my error","Inside Sync immediately");
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        Log.d("My error","is connected is " + isConnected);
+
+        if(! isConnected)
+        {
+          sendNetworkToast(context);
+        }
+
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -437,7 +460,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static void onAccountCreated(Account newAccount, Context context) {
 
-        Log.d("SunshineSyncadapter","Inside On account created");
         /*
          * Since we've created an account
          */
@@ -460,7 +482,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void notifyWeather() {
 
-        Log.d(LOG_TAG,"Inside OnNotifyWeather");
+        Log.d(LOG_TAG,"In on Notify");
+
 
         Context context = getContext();
 
@@ -472,9 +495,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
         long lastSync = prefs.getLong(lastNotificationKey, 0);
 
-        Log.d(LOG_TAG,"lastsync Value " + lastSync);
-
-
+        Log.d(LOG_TAG,"Lastsync " + lastSync);
 
         if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
 
@@ -522,11 +543,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                         Utility.formatTemperature(context, low, Utility.isMetric(context)));
 
+                Uri soundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                                        .setSmallIcon(iconId)
                                                        .setContentText(contentText)
-                                                       .setContentTitle("Sunshine");
+                                                       .setContentTitle("Sunshine")
+                                                       .setSound(soundURI);
 
                 Intent intent = new Intent(context, MainActivity.class);
 
@@ -555,6 +579,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
 
+    }
+
+    public static void sendNetworkToast(Context context)
+    {
+
+        Intent BroadcastIntent = new Intent();
+        BroadcastIntent.setAction(MainActivity.ShowToastReceiver.SHOW_TOAST);
+        BroadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        context.sendBroadcast(BroadcastIntent);
     }
 
 }

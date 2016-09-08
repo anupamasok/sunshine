@@ -1,11 +1,15 @@
 package com.example.android.sunshine.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
@@ -13,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private String mLocation;
+    private ShowToastReceiver mShowToastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
 
         super.onResume();
+        registerToastReceiver();
         String location = Utility.getPreferredLocation(this);
         String dLocation = ForecastAdapter.getDisplayLocation();
 
@@ -63,5 +69,34 @@ public class MainActivity extends AppCompatActivity {
             ff.onLocationChanged();
 
         }
+    }
+
+    public class ShowToastReceiver extends BroadcastReceiver
+    {
+        public static final String SHOW_TOAST = "SHOW_TOAST";
+
+        String message = "Oops! Couldn't connect to server. Check your network settings.";
+        int duration = Toast.LENGTH_SHORT;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() == SHOW_TOAST)
+                Toast.makeText(context,message,duration).show();
+        }
+    }
+
+    private void registerToastReceiver()
+    {
+        IntentFilter filter = new IntentFilter(ShowToastReceiver.SHOW_TOAST);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        mShowToastReceiver = new ShowToastReceiver();
+        registerReceiver(mShowToastReceiver,filter);
+
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(mShowToastReceiver);
+        super.onPause();
     }
 }
