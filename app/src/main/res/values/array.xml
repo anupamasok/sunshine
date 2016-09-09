@@ -9,5 +9,154 @@
         <item>@string/pref_units_imperial</item>
         <item>@string/pref_units_metric</item>
     </string-array>
+
+    <string-array name="pref_location_options">
+
+        <item>"Abu Dhabi"</item>
+        <item>"Agartala"</item>
+        <item>"Aizawl"</item>
+        <item>"Amsterdam"</item>
+        <item>"Barcelona"</item>
+        <item>"Bengaluru"</item>
+        <item>"Berlin"</item>
+        <item>"Bhopal"</item>
+        <item>"Bhubaneswar"</item>
+        <item>"Budapest"</item>
+        <item>"Cairo"</item>
+        <item>"Canberra"</item>
+        <item>"Chandigarh"</item>
+        <item>"Chennai"</item>
+        <item>"Dehradun"</item>
+        <item>"Dispur"</item>
+        <item>"Doha"</item>
+        <item>"Dubai"</item>
+        <item>"Dublin"</item>
+        <item>"Gandhinagar"</item>
+        <item>"Gangtok"</item>
+        <item>"Hyderabad"</item>
+        <item>"Imphal"</item>
+        <item>"Istambul"</item>
+        <item>"Itanagar"</item>
+        <item>"Jaipur"</item>
+        <item>"Jammu"</item>
+        <item>"Jeddah"</item>
+        <item>"Jerusalem"</item>
+        <item>"Kannur"</item>
+        <item>"Kavaratti"</item>
+        <item>"Kochi"</item>
+        <item>"Kohima"</item>
+        <item>"Kolkata"</item>
+        <item>"Kollam"</item>
+        <item>"Kozhikode"</item>
+        <item>"Kuwait City"</item>
+        <item>"Lagos"</item>
+        <item>"London"</item>
+        <item>"Los Angeles"</item>
+        <item>"Lucknow"</item>
+        <item>"Madrid"</item>
+        <item>"Melbourne"</item>
+        <item>"Miami"</item>
+        <item>"Moscow"</item>
+        <item>"Mumbai"</item>
+        <item>"Munich"</item>
+        <item>"Muscat"</item>
+        <item>"New Delhi"</item>
+        <item>"New York"</item>
+        <item>"Panaji"</item>
+        <item>"Paris"</item>
+        <item>"Patna"</item>
+        <item>"Port Blair"</item>
+        <item>"Prague"</item>
+        <item>"Raipur"</item>
+        <item>"Ranchi"</item>
+        <item>"Rome"</item>
+        <item>"Riyadh"</item>
+        <item>"San Francisco"</item>
+        <item>"Sharjah"</item>
+        <item>"Shillong"</item>
+        <item>"Shimla"</item>
+        <item>"Sydney"</item>
+        <item>"Thiruvanathapuram"</item>
+        <item>"Thrissur"</item>
+        <item>"Venice"</item>
+        <item>"Vienna"</item>
+        <item>"Visakhapatnam"</item>
+        <item>"Washington DC"</item>
+   </string-array>
+
+    <string-array name="pref_location_values">
+
+        <item>"292968"</item>
+        <item>"1279290"</item>
+        <item>"1279186"</item>
+        <item>"2759794"</item>
+        <item>"3128760"</item>
+        <item>"6695236"</item>
+        <item>"2950159"</item>
+        <item>"1275841"</item>
+        <item>"1275817"</item>
+        <item>"3054643"</item>
+        <item>"360630"</item>
+        <item>"2172517"</item>
+        <item>"1274746"</item>
+        <item>"1264527"</item>
+        <item>"1273313"</item>
+        <item>"1272508"</item>
+        <item>"290030"</item>
+        <item>"292223"</item>
+        <item>"2964574"</item>
+        <item>"1271715"</item>
+        <item>"1271631"</item>
+        <item>"1269843"</item>
+        <item>"1269771"</item>
+        <item>"739549"</item>
+        <item>"1269655"</item>
+        <item>1269515""</item>
+        <item>"1269321"</item>
+        <item>"105343"</item>
+        <item>"281184"</item>
+        <item>"1274987"</item>
+        <item>"1267390"</item>
+        <item>"1273874"</item>
+        <item>"1266366"</item>
+        <item>"1275004"</item>
+        <item>"1259091"</item>
+        <item>"1265873"</item>
+        <item>"387990"</item>
+        <item>"2332459"</item>
+        <item>"2643743"</item>
+        <item>"5368361"</item>
+        <item>"1264733"</item>
+        <item>"3117735"</item>
+        <item>"2158177"</item>
+        <item>"4164138"</item>
+        <item>"524901"</item>
+        <item>"1275339"</item>
+        <item>"6940463"</item>
+        <item>"287286"</item>
+        <item>"1273840"</item>
+        <item>"5128581"</item>
+        <item>"1260607"</item>
+        <item>"2988507"</item>
+        <item>"1260086"</item>
+        <item>"1259385"</item>
+        <item>"3067696"</item>
+        <item>"1258967"</item>
+        <item>"1258526"</item>
+        <item>"6691831"</item>
+        <item>"108410"</item>
+        <item>"5391959"</item>
+        <item>"292672"</item>
+        <item>"1256523"</item>
+        <item>"1256237"</item>
+        <item>"2147714"</item>
+        <item>"1254163"</item>
+        <item>"1254187"</item>
+        <item>"4176380"</item>
+        <item>"2761369"</item>
+        <item>"1252984"</item>
+        <item>"5549222"</item>
+
+    </string-array>
     
 </resources>

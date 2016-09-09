@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         mLocation = Utility.getPreferredLocation(this);
+        Log.d("my error", " mlocation " + mLocation);
         setContentView(R.layout.activity_main);
         SunshineSyncAdapter.initializeSyncAdapter(this);
 

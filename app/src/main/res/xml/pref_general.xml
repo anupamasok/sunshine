@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:title="@string/pref_title"
+    <ListPreference
+        android:title="@string/pref_location_title"
         android:key="@string/pref_location_key"
-        android:defaultValue="@string/pref_default_value"
-        android:inputType="text"
-        android:singleLine="true"></EditTextPreference>
+        android:defaultValue="@string/pref_location_default_value"
+        android:entries="@array/pref_location_options"
+        android:entryValues="@array/pref_location_values"/>
+
 
     <ListPreference
         android:title="@string/pref_units_title"

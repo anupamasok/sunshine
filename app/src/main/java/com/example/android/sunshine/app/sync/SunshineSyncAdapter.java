@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
-import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -543,14 +542,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                         Utility.formatTemperature(context, low, Utility.isMetric(context)));
 
-                Uri soundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                                        .setSmallIcon(iconId)
                                                        .setContentText(contentText)
-                                                       .setContentTitle("Sunshine")
-                                                       .setSound(soundURI);
+                                                       .setContentTitle("Sunshine");
 
                 Intent intent = new Intent(context, MainActivity.class);
 
@@ -583,6 +578,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static void sendNetworkToast(Context context)
     {
+
 
         Intent BroadcastIntent = new Intent();
         BroadcastIntent.setAction(MainActivity.ShowToastReceiver.SHOW_TOAST);
