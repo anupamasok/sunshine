@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         mLocation = Utility.getPreferredLocation(this);
-        Log.d("my error", " mlocation " + mLocation);
         setContentView(R.layout.activity_main);
         SunshineSyncAdapter.initializeSyncAdapter(this);
 
@@ -60,11 +58,8 @@ public class MainActivity extends AppCompatActivity {
         String location = Utility.getPreferredLocation(this);
         String dLocation = ForecastAdapter.getDisplayLocation();
 
-        Log.e("My Error","location : " + location + " dlocation : " + dLocation);
-
         if(location != null && !location.equals(dLocation) && dLocation != null)
         {
-            Log.e("My ERROR","Location has changed");
             mLocation = location;
             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
             ff.onLocationChanged();

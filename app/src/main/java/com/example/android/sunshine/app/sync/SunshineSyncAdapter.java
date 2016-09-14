@@ -107,7 +107,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             URL url = new URL(builtUri.toString());
 
-            Log.d(LOG_TAG,"Connecting to URL : " + builtUri.toString());
+            Log.v(LOG_TAG,"Connecting to URL : " + builtUri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -325,14 +325,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     Boolean.parseBoolean(getContext().getString(R.string.pref_enable_notifications_default)));
 
-            Log.d(LOG_TAG," Display notification is " + displayNotifications);
-
             if(displayNotifications)
               notifyWeather();
 
         } catch (JSONException e) {
-
-            Log.d(LOG_TAG,"Inside json exception");
 
             sendNetworkToast(getContext());
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -382,12 +378,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     public static void syncImmediately(Context context) {
 
-        Log.d("my error","Inside Sync immediately");
-
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        Log.d("My error","is connected is " + isConnected);
 
         if(! isConnected)
         {
@@ -428,13 +421,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }
-            /*
-             * If you don't set android:syncable="true" in
-             * in your <provider> element in the manifest,
-             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
-             * here.
-             */
-
             onAccountCreated(newAccount,context);
         }
         return newAccount;
@@ -481,9 +467,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void notifyWeather() {
 
-        Log.d(LOG_TAG,"In on Notify");
-
-
         Context context = getContext();
 
         //checking the last update and notify if it' the first of the day
@@ -494,22 +477,12 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
         long lastSync = prefs.getLong(lastNotificationKey, 0);
 
-        Log.d(LOG_TAG,"Lastsync " + lastSync);
-
         if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
 
-            // Last sync was more than 1 day ago, let's send a notification with the weather.
+            // Last sync was more than 1 day ago
 
             String locationQuery = Utility.getPreferredLocation(context);
-
-
-
             Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
-
-
-
-            // we'll query our contentProvider, as always
-
             Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
 
 
@@ -517,29 +490,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             if (cursor.moveToFirst()) {
 
                 int weatherId = cursor.getInt(INDEX_WEATHER_ID);
-
                 double high = cursor.getDouble(INDEX_MAX_TEMP);
-
                 double low = cursor.getDouble(INDEX_MIN_TEMP);
-
                 String desc = cursor.getString(INDEX_SHORT_DESC);
-
-
-
                 int iconId = Utility.getArtResourceForWeatherCondition(weatherId);
-
                 String title = context.getString(R.string.app_name);
 
 
-
-                // Define the text of the forecast.
-
                 String contentText = String.format(context.getString(R.string.format_notification),
-
                         desc,
-
                         Utility.formatTemperature(context, high, Utility.isMetric(context)),
-
                         Utility.formatTemperature(context, low, Utility.isMetric(context)));
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -563,9 +523,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 //refreshing last sync
 
                 SharedPreferences.Editor editor = prefs.edit();
-
                 editor.putLong(lastNotificationKey, System.currentTimeMillis());
-
                 editor.commit();
 
             }
@@ -578,8 +536,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static void sendNetworkToast(Context context)
     {
-
-
         Intent BroadcastIntent = new Intent();
         BroadcastIntent.setAction(MainActivity.ShowToastReceiver.SHOW_TOAST);
         BroadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
